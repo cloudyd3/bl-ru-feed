@@ -32,18 +32,26 @@ def main():
     if LATEST_RECEIVED != data['response']['items'][0]['id']:
 
         data['response']['items'][0]['text'] = re.sub(r"#\w+@?\w+", "", data['response']['items'][0]['text'])
+        data['response']['items'][0]['text'] = re.sub(r"\[.*?\||\]", "", data['response']['items'][0]['text'])
         # data['response']['items'][0]['text'] = re.sub(r"(^|\s)((https?:\/\/)?[\w-]+(\.[a-z-]+)+\.?(:\d+)?(\/\S*)?)", "", data['response']['items'][0]['text'])
         data['response']['items'][0]['text'] = data['response']['items'][0]['text'].replace('\n\n', '\n')
 
         request = {"content": ping_message, "embeds": []}
 
         if len(data['response']['items'][0]['text']) > 2000:
+            try:
+                profile_icon = data['response']['profiles'][0]['photo_100']
+                profile_name = '{} {}'.format(data['response']['profiles'][0]['first_name'],
+                                              data['response']['profiles'][0]['last_name'])
+            except IndexError:
+
+                profile_icon = ""
+                profile_name = ""
             splitted_text = data['response']['items'][0]['text'].split('\n')
             embed = {
                 "footer": {
-                    "icon_url": data['response']['profiles'][0]['photo_100'],
-                    "text": '{} {}'.format(data['response']['profiles'][0]['first_name'],
-                                           data['response']['profiles'][0]['last_name']),
+                    "icon_url": profile_icon,
+                    "text": profile_name,
                 },
                 "description": '{}'.format(splitted_text[0]),
                 "author": {
@@ -68,12 +76,22 @@ def main():
                         "description": i
                     }
                     request["embeds"].append(embed)
+
+
+
         else:
+            try:
+                profile_icon = data['response']['profiles'][0]['photo_100']
+                profile_name = '{} {}'.format(data['response']['profiles'][0]['first_name'],
+                                              data['response']['profiles'][0]['last_name'])
+            except IndexError:
+
+                profile_icon = ""
+                profile_name = ""
             embed = {
                 "footer": {
-                    "icon_url": data['response']['profiles'][0]['photo_100'],
-                    "text": '{} {}'.format(data['response']['profiles'][0]['first_name'],
-                                           data['response']['profiles'][0]['last_name']),
+                    "icon_url": profile_icon,
+                    "text": profile_name,
                 },
                 "description": data['response']['items'][0]['text'],
                 "author": {

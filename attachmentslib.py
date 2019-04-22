@@ -53,8 +53,15 @@ def merge_attachments(data, request):
                     request["embeds"].append(embed)
             if attachments[i]['type'] == 'video':
                 embed = {
+                    "title": "**{}**".format(attachments[i]['video']['title']),
+                    "url": "https://vk.com/video?z=video{}_{}".format(attachments[i]['video']['owner_id'],
+                                                             attachments[i]['video']['id']),
+                    "thumbnail": {
+                        "url": "https://image.flaticon.com/icons/png/24/61/61139.png",
+                    },
+
                     "image": {
-                        "url": attachments[i]['video']['first_frame_720']
+                        "url": attachments[i]['video']['photo_800']
                     },
                     "color": 4880040
                 }
