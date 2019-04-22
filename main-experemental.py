@@ -2,30 +2,34 @@
 import json
 import re
 import time
-
+import os
 import requests
 
 import attachmentslib
 
-with open('vk_conf.json') as vk_json:
-    PAYLOAD = json.load(vk_json)
-
-with open('discord_webhooks.json') as webhooks_json:
-    WEBHOOKS = json.load(webhooks_json)
-
 URL = 'https://api.vk.com/method/wall.get'
 LATEST_RECEIVED = 'none'
-
+PAYLOAD = {
+  "domain": "borderlands",
+  "count": 1,
+  "filter": "owner",
+  "extended": 1,
+  "offset": 0,
+  "access_token": os.getenv("ACCESS_TOKEN"),
+  "v": 5.95
+}
+print(os.getenv("ACCESS_TOKEN"))
 
 def main():
     global LATEST_RECEIVED
     data = requests.get(URL, params=PAYLOAD).json()
+    print(data)
     if '#art' in data['response']['items'][0]['text']:
-        webhook_url = WEBHOOKS["webhook_art"]
+        webhook_url = os.getenv("WEBHOOK_2")
         ping_message = ""
     else:
-        webhook_url = WEBHOOKS["webhook"]
-        ping_message = "heyooo"
+        webhook_url = os.getenv("WEBHOOK_1")
+        ping_message = "<@&562705250470068248>"
 
         # "<@&562705250470068248>"
 
