@@ -1,3 +1,4 @@
+# coding=utf8
 def merge_attachments(data, request):
     try:
         attachments = data['attachments']
